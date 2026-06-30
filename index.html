@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Management System</title>
+    <style>
+      :root {
+        --bg: #08111f;
+        --panel: #101c31;
+        --panel-2: #15263f;
+        --text: #f2f6ff;
+        --muted: #95a7c9;
+        --accent: #6c8cff;
+        --accent-2: #34d399;
+        --danger: #ff6b6b;
+        --border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #0e1b2f 60%, #101c31);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+      }
+
+      .brand {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .nav {
+        display: flex;
+        gap: 18px;
+        color: var(--muted);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 24px;
+        padding: 24px 0 36px;
+        align-items: center;
+      }
+
+      .hero-card,
+      .panel {
+        background: rgba(16, 28, 49, 0.92);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+      }
+
+      .hero-card {
+        padding: 30px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 3vw, 2.9rem);
+        margin: 0 0 12px;
+        line-height: 1.1;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.7;
+        margin: 0 0 18px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), #879dff);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+
+      .hero-preview {
+        padding: 24px;
+        min-height: 300px;
+      }
+
+      .overview-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .overview-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: var(--panel-2);
+        border-radius: 14px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .stat-box {
+        padding: 18px;
+        border-radius: 18px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+      }
+
+      .stat-box h3 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+
+      .stat-box .value {
+        font-size: 1.35rem;
+        font-weight: 700;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+        padding-bottom: 32px;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .panel-header h2 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .subscription-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .subscription-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: var(--panel-2);
+      }
+
+      .subscription-item strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .meta {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(52, 211, 153, 0.16);
+        color: #8ef2c2;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      form {
+        display: grid;
+        gap: 10px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 11px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #0f1a2d;
+        color: var(--text);
+      }
+
+      .small {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .delete-btn {
+        background: rgba(255, 107, 107, 0.12);
+        border: none;
+        color: var(--danger);
+        border-radius: 10px;
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">SubsPilot</div>
+        <nav class="nav">
+          <a href="#overview">Overview</a>
+          <a href="#subscriptions">Subscriptions</a>
+          <a href="#add">Add New</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div class="hero-card">
+          <h1>Track every subscription in one calm dashboard.</h1>
+          <p>
+            A simple subscription management system for beginners to monitor
+            monthly spending, renewal dates, and active services without stress.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#add">Add Subscription</a>
+            <a class="btn btn-secondary" href="#subscriptions">View List</a>
+          </div>
+        </div>
+
+        <div class="hero-card hero-preview" id="overview">
+          <div class="overview-list">
+            <div class="overview-item">
+              <span>Active subscriptions</span>
+              <strong id="activeCount">0</strong>
+            </div>
+            <div class="overview-item">
+              <span>Monthly spend</span>
+              <strong id="monthlySpend">$0</strong>
+            </div>
+            <div class="overview-item">
+              <span>Next renewal</span>
+              <strong id="nextRenewal">No data</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat-box">
+          <h3>Managed services</h3>
+          <div class="value" id="serviceCount">0</div>
+        </div>
+        <div class="stat-box">
+          <h3>Yearly cost</h3>
+          <div class="value" id="yearlySpend">$0</div>
+        </div>
+        <div class="stat-box">
+          <h3>Upcoming renewals</h3>
+          <div class="value" id="renewalCount">0</div>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel" id="subscriptions">
+          <div class="panel-header">
+            <h2>Your subscriptions</h2>
+            <span class="pill">Live updates</span>
+          </div>
+          <div class="subscription-list" id="subscriptionList"></div>
+        </div>
+
+        <div class="panel" id="add">
+          <div class="panel-header">
+            <h2>Add a subscription</h2>
+            <span class="small">Beginner friendly</span>
+          </div>
+          <form id="subscriptionForm">
+            <input id="name" placeholder="Service name" required />
+            <input id="amount" type="number" step="0.01" min="0" placeholder="Monthly cost" required />
+            <select id="interval">
+              <option>Monthly</option>
+              <option>Yearly</option>
+            </select>
+            <input id="renewal" type="date" required />
+            <input id="category" placeholder="Category" required />
+            <button class="btn btn-primary" type="submit">Save subscription</button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const storageKey = "subsPilotSubscriptions";
+      const defaultSubscriptions = [
+        {
+          id: 1,
+          name: "Netflix",
+          amount: 15.99,
+          interval: "Monthly",
+          renewal: "2026-07-15",
+          category: "Entertainment"
+        },
+        {
+          id: 2,
+          name: "Adobe Creative Cloud",
+          amount: 59.99,
+          interval: "Monthly",
+          renewal: "2026-07-22",
+          category: "Work"
+        },
+        {
+          id: 3,
+          name: "Spotify",
+          amount: 10.99,
+          interval: "Monthly",
+          renewal: "2026-08-01",
+          category: "Music"
+        }
+      ];
+
+      let subscriptions = JSON.parse(localStorage.getItem(storageKey)) || defaultSubscriptions;
+
+      const form = document.getElementById("subscriptionForm");
+      const list = document.getElementById("subscriptionList");
+      const activeCount = document.getElementById("activeCount");
+      const monthlySpend = document.getElementById("monthlySpend");
+      const nextRenewal = document.getElementById("nextRenewal");
+      const serviceCount = document.getElementById("serviceCount");
+      const yearlySpend = document.getElementById("yearlySpend");
+      const renewalCount = document.getElementById("renewalCount");
+
+      function formatCurrency(value) {
+        return `$${value.toFixed(2)}`;
+      }
+
+      function renderSubscriptions() {
+        if (!subscriptions.length) {
+          list.innerHTML = '<div class="small">No subscriptions yet. Add your first one.</div>';
+          return;
+        }
+
+        list.innerHTML = subscriptions
+          .map((item) => {
+            const monthlyAmount = item.interval === "Yearly" ? item.amount / 12 : item.amount;
+            return `
+              <div class="subscription-item">
+                <div>
+                  <strong>${item.name}</strong>
+                  <div class="meta">${item.category} • ${item.interval} • Renewal ${item.renewal}</div>
+                </div>
+                <div style="text-align:right;">
+                  <div><strong>${formatCurrency(monthlyAmount)}</strong></div>
+                  <div class="meta">${item.amount > 0 ? formatCurrency(item.amount) : "Free"}</div>
+                  <button class="delete-btn" data-id="${item.id}">Remove</button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function updateSummary() {
+        const totalMonthly = subscriptions.reduce((sum, item) => {
+          return sum + (item.interval === "Yearly" ? item.amount / 12 : item.amount);
+        }, 0);
+
+        const yearly = totalMonthly * 12;
+        const next = [...subscriptions].sort((a, b) => a.renewal.localeCompare(b.renewal))[0];
+        const soon = subscriptions.filter((item) => item.renewal <= new Date().toISOString().slice(0, 10)).length;
+
+        activeCount.textContent = subscriptions.length;
+        monthlySpend.textContent = formatCurrency(totalMonthly);
+        nextRenewal.textContent = next ? next.name : "No data";
+        serviceCount.textContent = subscriptions.length;
+        yearlySpend.textContent = formatCurrency(yearly);
+        renewalCount.textContent = soon;
+      }
+
+      function saveSubscriptions() {
+        localStorage.setItem(storageKey, JSON.stringify(subscriptions));
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newSubscription = {
+          id: Date.now(),
+          name: document.getElementById("name").value.trim(),
+          amount: Number(document.getElementById("amount").value),
+          interval: document.getElementById("interval").value,
+          renewal: document.getElementById("renewal").value,
+          category: document.getElementById("category").value.trim()
+        };
+
+        subscriptions.unshift(newSubscription);
+        saveSubscriptions();
+        renderSubscriptions();
+        updateSummary();
+        form.reset();
+      });
+
+      list.addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-btn")) {
+          const id = Number(event.target.dataset.id);
+          subscriptions = subscriptions.filter((item) => item.id !== id);
+          saveSubscriptions();
+          renderSubscriptions();
+          updateSummary();
+        }
+      });
+
+      renderSubscriptions();
+      updateSummary();
+    </script>
+  </body>
+</html>
